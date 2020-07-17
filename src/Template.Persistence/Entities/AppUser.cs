@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Identity;
 
-namespace Template.Server.Entities
+namespace Template.Persistence.Entities
 {
     public class AppUser : IdentityUser<int>
     {

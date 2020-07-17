@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Template.Domain.Common.Validation;
 using Template.Domain.Models;
-using Template.Server.Entities;
+using Template.Persistence.Entities;
 using Template.Server.Providers.Interfaces;
 
 namespace Template.Server.Providers.Implementations
