@@ -1,1 +1,1 @@
-# etosha-template
+# Etosha Template
