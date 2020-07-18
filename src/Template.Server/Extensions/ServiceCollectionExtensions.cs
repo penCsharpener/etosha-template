@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Template.Persistence;
 using Template.Persistence.Entities;
+using Template.Server.Execution;
 using Template.Server.Providers.Implementations;
 using Template.Server.Providers.Interfaces;
 
@@ -25,6 +26,7 @@ namespace Template.Server.Extensions
 
         public static void AddEtoshaServices(this IServiceCollection services)
         {
+            services.AddScoped<IActionExecutor, ActionExecutor>();
             services.AddScoped<IAuthenticationProvider, AuthenticationProvider>();
         }
     }

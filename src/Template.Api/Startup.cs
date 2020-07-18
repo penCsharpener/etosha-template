@@ -22,6 +22,7 @@ namespace Template.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddEtoshaServices();
             services.AddEntityFramework(_configuration.GetConnectionString("DefaultConnection"));
             services.AddIdentityFramework(_configuration.GetSection("PasswordOptions").Get<PasswordOptions>());
             services.AddSingleton<IWebTokenBuilder, WebTokenBuilder>();
