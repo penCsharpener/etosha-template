@@ -17,10 +17,8 @@ namespace Template.Server.Extensions
 
         public static void AddIdentityFramework(this IServiceCollection services, Microsoft.AspNetCore.Identity.PasswordOptions options)
         {
-            services.AddIdentityCore<AppUser>(setup =>
-            {
-                setup.Password = options;
-            })
+            services.AddIdentityCore<AppUser>(setup => setup.Password = options)
+            .AddRoles<AppRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
         }

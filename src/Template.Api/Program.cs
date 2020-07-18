@@ -1,14 +1,16 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Template.Persistence.Extensions;
 
 namespace Template.Api
 {
     public sealed class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
 
@@ -18,7 +20,8 @@ namespace Template.Api
 
                 try
                 {
-
+                    services.MigrateDatabase();
+                    await services.SeedData();
                 }
                 catch (Exception ex)
                 {
