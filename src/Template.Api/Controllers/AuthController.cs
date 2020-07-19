@@ -7,6 +7,7 @@ using Template.Server.Providers.Interfaces;
 
 namespace Template.Api.Controllers
 {
+    [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly ILogger<AuthController> _logger;
@@ -29,7 +30,7 @@ namespace Template.Api.Controllers
                 return BadRequest(ModelState);
             }
 
-            var user = await _authenticationProvider.Login(model);
+            var user = await _authenticationProvider.LoginAsync(model);
 
             if (user == null)
             {
@@ -39,6 +40,37 @@ namespace Template.Api.Controllers
 
             var token = _webTokenBuilder.GenerateToken(user);
             return Ok(new { user.FirstName, user.LastName, Token = token });
+        }
+
+        [HttpPost("register")]
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
+        {
+            if (!model.Password.Equals(model.PasswordConfirm))
+            {
+                return BadRequest("Password confirmation doesn't match.");
+            }
+
+            var result = await _authenticationProvider.RegisterAsync(model, (obj) => Url.Action(nameof(VerifyEmail), "Auth", obj, Request.Scheme, Request.Host.ToString()));
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+        [HttpGet("verifyemail")]
+        public async Task<IActionResult> VerifyEmail(string username, string code)
+        {
+            var result = await _authenticationProvider.VerifyEmail(username, code);
+
+            if (!result)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

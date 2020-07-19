@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
 using Template.Persistence;
 using Template.Persistence.Entities;
 using Template.Server.Execution;
@@ -16,12 +19,24 @@ namespace Template.Server.Extensions
             services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString));
         }
 
-        public static void AddIdentityFramework(this IServiceCollection services, Microsoft.AspNetCore.Identity.PasswordOptions options)
+        public static void AddIdentityFramework(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddIdentityCore<AppUser>(setup => setup.Password = options)
+            var passwordOptions = configuration.GetSection("PasswordOptions").Get<PasswordOptions>();
+
+            services.AddIdentityCore<AppUser>(setup =>
+            {
+                setup.Password = passwordOptions;
+                setup.SignIn.RequireConfirmedEmail = true;
+            })
             .AddRoles<AppRole>()
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+
+            var mailOptions = configuration.GetSection("MailKitOptions").Get<MailKitOptions>();
+            services.AddMailKit(config =>
+            {
+                config.UseMailKit(mailOptions);
+            });
         }
 
         public static void AddEtoshaServices(this IServiceCollection services)

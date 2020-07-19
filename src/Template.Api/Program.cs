@@ -39,7 +39,7 @@ namespace Template.Api
                     .ConfigureWebHostDefaults(webBuilder =>
                     {
                         webBuilder.UseStartup<Startup>()
-                                  .UseUrls("http://localhost:5880");
+                                  .UseUrls("https://localhost:5881;http://localhost:5880");
                     });
         }
     }
